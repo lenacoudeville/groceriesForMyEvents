@@ -75,8 +75,12 @@ WSGI_APPLICATION = 'groceriesForMyEvents.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'd1kgmpkhdfo2pn',
+        'USER': 'wdzipetxshxrob',
+        'PASSWORD': '85acd2d96eb030b298ab4fb4f52fa1cb23cc5b0fee15a68a1700ca7d526d04a6',
+        'HOST': 'ec2-54-225-103-167.compute-1.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
@@ -118,3 +122,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Configure Django App for Heroku.
+import django_heroku
+django_heroku.settings(locals())
