@@ -15,8 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.conf.urls import url, include
 
 urlpatterns = [
-	path('myGroceries/', include('myGroceries.urls')),
-    path('admin/', admin.site.urls),
+	url(r'^myGroceries/', include('myGroceries.urls')),
+    url(r'^admin/', admin.site.urls),
+    url(r'^account/', include('allauth.urls')),
+    url(r'^', include('HomePage.urls'))
 ]

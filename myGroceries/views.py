@@ -3,4 +3,4 @@ from django.http import HttpResponse
 
 
 def index(request):
-    return HttpResponse("Bienvenue sur GroceriesForMyEvents")
+    return HttpResponse("<H1>Bienvenue sur GroceriesForMyEvents</H1>")
