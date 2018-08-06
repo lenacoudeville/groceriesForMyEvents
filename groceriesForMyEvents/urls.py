@@ -18,8 +18,7 @@ from django.urls import include, path
 from django.conf.urls import url, include
 
 urlpatterns = [
-	url(r'^myGroceries/', include('myGroceries.urls')),
+	url(r'^', include('myGroceries.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^account/', include('allauth.urls')),
-    url(r'^', include('HomePage.urls'))
 ]

@@ -35,7 +35,6 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'django.contrib.sites',
-    'HomePage',
     'myGroceries',
     'django.contrib.admin',
     'django.contrib.auth',
