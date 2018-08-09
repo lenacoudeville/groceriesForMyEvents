@@ -5,26 +5,35 @@ import datetime
 
 
 class Event(models.Model):
-	id = models.AutoField(primary_key=True)
-	name = models.TextField(default='')
-	start_date = models.DateField(auto_now = False)
-	end_date = models.DateField(auto_now = False)
-	description = models.CharField(max_length=250)
-	id_host = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=250)
+    start_date = models.DateField(auto_now = False)
+    end_date = models.DateField(auto_now = False)
+    description = models.TextField(default='')
+    host = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
 
 
 class Invitation(models.Model):
-    id_invit = models.AutoField(primary_key=True)
-    id_event = models.ForeignKey(Event, on_delete=models.CASCADE)
-    id_user = models.ForeignKey(User, on_delete=models.CASCADE)
-    accepted = models.BooleanField(default=0)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    guest = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.event.name)
 
 
 class Product(models.Model):
-	id = models.AutoField(primary_key=True)
-	name = models.TextField()
+    name = models.TextField()
+
+    def __str__(self):
+        return self.name
 
 
-class InvitProd(models.Model):
-	id_invit = models.ForeignKey(Invitation, on_delete=models.CASCADE)
-	id_prod = models.ForeignKey(Product, on_delete=models.CASCADE)
+class Participation(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    product = models.ManyToManyField(Product)
+
+    def __str__(self):
+        return self.user.username + " - " + self.event.name

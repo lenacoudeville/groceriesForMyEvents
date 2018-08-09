@@ -1,0 +1,11 @@
+{% extends 'myGroceries/layout.html' %}
+
+{% block title %}Créer un événement{% endblock %}
+
+{% block content %}
+<h1>Créer un événement</h1>
+    <form method="POST" class="event-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Continuer</button>
+    </form>
+    {% endblock %}
