@@ -3,10 +3,14 @@
 {% block title %}Inviter{% endblock %}
 
 {% block content %}
-<h1>{{ event }}</h1>
-<h2>Inviter du monde</h2>
-    <a class='btn btn-light pull-left' style='margin-bottom:5px' href="{% url 'myGroceries:event_detail' name_event=event.name %}">Voir l'événement</a>
-    <a class='btn btn-light pull-left' style='margin-bottom:5px' href="{% url 'myGroceries:homepage' %}">Page d'accueil</a><br/>
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'myGroceries:homepage' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'myGroceries:event_detail' name_event=event.name %}">{{ event.name }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Invités</li>
+  </ol>
+</nav>
 
     <form action="{% url 'myGroceries:invitation_to_my_event_act' name_event=event %}" method="post">
         {% csrf_token %}
@@ -20,7 +24,7 @@
             {% endif %}
         {% endfor %}
             <tr>
-                <td><button type="submit" class="btn btn-primary">Envoyer</button></td>
+                <td><button type="submit" class="btn">Enregistrer</button></td>
             </tr>
         </table>
         </div>

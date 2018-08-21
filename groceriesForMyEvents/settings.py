@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -41,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'widget_tweaks',
+    'django-nexmo',
 ]
 
 MIDDLEWARE = [
@@ -100,8 +103,12 @@ DATABASES = {
 """
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'd1kgmpkhdfo2pn',
+        'USER': 'wdzipetxshxrob',
+        'PASSWORD': '85acd2d96eb030b298ab4fb4f52fa1cb23cc5b0fee15a68a1700ca7d526d04a6',
+        'HOST': 'ec2-54-225-103-167.compute-1.amazonaws.com',
+        'PORT': '5432',
     }
 } 
 
@@ -151,6 +158,8 @@ SITE_ID = 1
 LOGIN_URL = '/accounts/login/'
 
 LOGIN_REDIRECT_URL='/'
+LOGOUT_REDIRECT_URL='/accounts/login/'
+REGISTRATION_OPEN=False
 
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_CONFIRM_EMAIL_ON_GET = False
@@ -164,7 +173,7 @@ ACCOUNT_EMAIL_SUBJECT_PREFIX = "My Subject : "
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'http'
 
 ACCOUNT_LOGOUT_ON_GET = False
-ACCOUNT_LOGOUT_REDIRECT_URL = "/account/login"
+ACCOUNT_LOGOUT_REDIRECT_URL = "/accounts/login"
 ACCOUNT_SIGNUP_FORM_CLASS = None
 ACCOUNT_SIGNUP_PASSWORD_VERIFICATION = True
 ACCOUNT_UNIQUE_EMAIL = True
@@ -183,5 +192,4 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 # Configure Django App for Heroku.
-import django_heroku
 django_heroku.settings(locals())

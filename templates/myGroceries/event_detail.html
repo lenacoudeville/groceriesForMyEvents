@@ -4,30 +4,35 @@
 
 {% block content %}
 
-{% if user == event.host %}
-	<a href="" class="btn btn-primary">Modifier</a>
-	<a href="" class="btn btn-primary">Supprimer</a>
-{% endif %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'myGroceries:homepage' %}">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ event.name }}</li>
+  </ol>
+</nav>
 
-<H1>{{ event.name }}</H1>
-<H2>{{ event.description }}</H2>
-<H3>Du {{ event.start_date }} au {{ event.end_date }}</H3>
+<p>Nom : {{ event.name }}
+{% if user == event.host %}
+	 (<a href="{% url 'myGroceries:update_event' name_event=event.name %}">Modifier</a> / 
+	<a href="{% url 'myGroceries:delete_event' name_event=event.name %}">Supprimer</a>)
+{% endif %}</p>
+<p>Description : {{ event.description }}</p>
+<p>Dates : du {{ event.start_date }} au {{ event.end_date }}</p>
+<br/>
 
 <div class="table-responsive">
  	<table class="table">
-		<thead class="table-success">
-			<th>Invités</th>
-			<th>Ses courses</th>
-		</thead>
+ 		{% if user == event.host %}
+ 		<tr>
+ 			<td colspan="2"><a href="{% url 'myGroceries:invitation_to_my_event' name_event=event.name %}">Inviter</a></td>
+ 		</tr>
+ 		{% endif %}
 		{% for guest in guest_groceries %}
 		<tr class="table-success">
 			<td>{{ guest.user.username }}</td>
-			<td>{% for c in guest.product.all %}{{c}} {% endfor %}{% if guest.user == user %}<a href="">ajouter</a>{% endif %}</td>
+			<td>{% for c in guest.product.all %}{{c}} {% endfor %}{% if guest.user == user %}<a href="{% url 'myGroceries:add_products_to_event' name_event=event.name id_invite=guest.user.username %}">ajouter</a>{% endif %}</td>
 		</tr>
 		{% endfor %}
 	</table>
-	{% if user == event.host %}
-	<a href="{% url 'myGroceries:invitation_to_my_event' name_event=event.name %}" class="btn btn-primary">Inviter</a>
-	{% endif %}
 </div>
 {% endblock %}
