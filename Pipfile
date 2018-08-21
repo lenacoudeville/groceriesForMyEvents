@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 gunicorn = "*"
 django-heroku = "*"
+django-allauth = "*"
+django-widget-tweaks = "*"
 
 [dev-packages]
 
