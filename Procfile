@@ -1,1 +1,1 @@
-web: gunicorn groceriesForMyEvents.wsgi --log-file -
+web: gunicorn groceriesformyevents:app
