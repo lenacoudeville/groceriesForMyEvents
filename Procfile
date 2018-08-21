@@ -1,1 +1,1 @@
-web: gunicorn groceriesformyevents:app
+web: gunicorn mygroceries:app
