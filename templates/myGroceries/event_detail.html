@@ -13,7 +13,7 @@
 
 <p>Nom : {{ event.name }}
 {% if user == event.host %}
-	 (<a href="{% url 'myGroceries:update_event' name_event=event.name %}">Modifier</a> / 
+	 (<!--<a href="{% url 'myGroceries:update_event' name_event=event.name %}">Modifier</a> / -->
 	<a href="{% url 'myGroceries:delete_event' name_event=event.name %}">Supprimer</a>)
 {% endif %}</p>
 <p>Description : {{ event.description }}</p>
@@ -28,11 +28,19 @@
  		</tr>
  		{% endif %}
 		{% for guest in guest_groceries %}
-		<tr class="table-success">
-			<td>{{ guest.user.username }}</td>
-			<td>{% for c in guest.product.all %}{{c}} {% endfor %}{% if guest.user == user %}<a href="{% url 'myGroceries:add_products_to_event' name_event=event.name id_invite=guest.user.username %}">ajouter</a>{% endif %}</td>
+		<tr>
+			<td>
+				{{ guest.user.username }}
+			</td>
+			<td>{% for c in guest.product.all %}- {{c}}<br/> {% endfor %}{% if guest.user == user %}<a href="{% url 'myGroceries:add_products_to_event' name_event=event.name %}">+ ajouter</a>{% endif %}</td>
 		</tr>
 		{% endfor %}
+		{% for invite in invited %}
+ 		<tr>
+ 			<td colspan="2" style="color: grey;">
+ 				{{ invite.guest.username}}</td>
+ 		</tr>
+ 		{% endfor %}
 	</table>
 </div>
 {% endblock %}

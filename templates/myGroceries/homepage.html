@@ -10,7 +10,6 @@
   </ol>
 </nav>
 
-{% if hostingevents %}
 <h3>Mes événements ({{ hostingevents|length }})<a class='btn btn-light' style='margin-bottom:5px' href="{% url 'myGroceries:create_event' %}"><span class='glyphicon glyphicon-plus'></span></a></h3>
 
 
@@ -25,11 +24,6 @@
 {% endfor %}
 </table>
 </div>
-{% else %}
-<a class='btn btn-light pull-left' style='margin-bottom:5px' href="{% url 'myGroceries:create_event' %}"><span class='glyphicon glyphicon-plus'></span> Créer un événement</a><br/>
-
-{% endif %}
-<br>
 
 
 <h3>Mes invitations ({{ guesttoevents|length }})</h3>
@@ -42,8 +36,8 @@
 		<td>{{ guesttoevent.event.start_date }} au {{ guesttoevent.event.end_date }}</td>
 		<td>{{ guesttoevent.event.description }}</td>
 		<td>
-			<a href="{% url 'myGroceries:invitation_to_my_event_accept' name_event=guesttoevent.event.name %}" class="btn btn-primary">accepter</a>
-			<a href="{% url 'myGroceries:invitation_to_my_event_refuse' name_event=guesttoevent.event.name %}" class="btn btn-secondary">refuser</a>
+			<a href="{% url 'myGroceries:invitation_to_event_accept' name_event=guesttoevent.event.name %}">accepter</a> / 
+			<a href="{% url 'myGroceries:invitation_to_event_refuse' name_event=guesttoevent.event.name %}">refuser</a>
 		</td>
 	</tr>
 {% endfor %}
@@ -62,7 +56,7 @@ Vous n'avez aucune invitation pour le moment
 		<td><a href="{% url 'myGroceries:event_detail' name_event=guesttoparticipant.event.name %}">{{ guesttoparticipant.event.name }}</a></td>
 		<td>{{ guesttoparticipant.event.start_date }} au {{ guesttoparticipant.event.end_date }}</td>
 		<td>{{ guesttoparticipant.event.description }}</td>
-		<td><a href="{% url 'myGroceries:participation_to_my_event_cancel' name_event=guesttoparticipant.event.name %}">annuler</a></td>
+		<td><a href="{% url 'myGroceries:participation_to_event_cancel' name_event=guesttoparticipant.event.name %}">annuler</a></td>
 	</tr>
 {% endfor %}
 </table>

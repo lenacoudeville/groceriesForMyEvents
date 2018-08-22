@@ -25,10 +25,10 @@ def homepage(request):
 def event_detail(request, name_event):
 	logged_in_user = request.user #récupération de l'utilisateur
 	event = get_object_or_404(Event, name=name_event)
+	invited = Invitation.objects.filter(event=event)
 	guest_groceries = Participation.objects.filter(event=event)
-	# course = guest_groceries.product.all()
 	template = 'myGroceries/event_detail.html'
-	context={'event': event, 'guest_groceries': guest_groceries}
+	context={'event': event, 'invited': invited, 'guest_groceries': guest_groceries}
 	return render(request, template, context)
 
 
@@ -43,12 +43,14 @@ def create_event(request):
 			event.host = request.user #affiliation de l'id de l'utilisateur à l'id_host
 			event.save()
 			return redirect('myGroceries:invitation_to_my_event', name_event=event.name) #si le formulaire est validé, renvoi vers l'invitation d'utilisateurs à l'event
+#		participation = Participation(user=request.user, event=event.name)
+#		participation.save()
 	else:
 		form = EventForm()
 	return render(request, template, {'form': form})
 
 
-#Page de suppression d'un événement
+#Action de suppression d'un événement
 @login_required
 def delete_event(request, name_event):
 	try:
@@ -60,21 +62,20 @@ def delete_event(request, name_event):
 
 
 #Page de modification d'un événement
-@login_required
-def update_event(request, name_event):
-	template = 'myGroceries/update_event.html'
-	try:
-		event = get_object_or_404(Event, name=name_event)
-		if event.start_date != request.POST.get("start_date"):
-			event.start_date = request.POST.get("start_date")
-		if event.end_date != request.POST.get("end_date").replace("\\xa0", ""):
-			event.end_date = request.POST.get("end_date").replace("\\xa0", "")
-		if event.description != request.POST.get("description").replace("\\xa0", ""):
-			event.description = request.POST.get("description").replace("\\xa0", "")
-		event.save()
-	except ObjectDoesNotExist:
-		pass
-	return redirect("/event/" + name_event + "/")
+#@login_required
+#def update_event(request, name_event):
+#	try:
+#		event = get_object_or_404(Event, name=name_event)
+#		if event.start_date != request.POST.get("start_date"):
+#			event.start_date = request.POST.get("start_date")
+#		if event.end_date != request.POST.get("end_date").replace("\\xa0", ""):
+#			event.end_date = request.POST.get("end_date").replace("\\xa0", "")
+#		if event.description != request.POST.get("description").replace("\\xa0", ""):
+#			event.description = request.POST.get("description").replace("\\xa0", "")
+#		event.save()
+#	except ObjectDoesNotExist:
+#		pass
+#	return redirect("/event/" + name_event + "/")
 
 
 
@@ -91,7 +92,7 @@ def invitation_to_my_event(request, name_event):
 
 
 
-#Page d'invitation à l'événement
+#Action d'invitation à l'événement
 @login_required
 def invitation_to_my_event_act(request, name_event):
 	logged_in_user = request.user #récupération de l'utilisateur
@@ -110,9 +111,9 @@ def invitation_to_my_event_act(request, name_event):
 	return redirect("myGroceries:event_detail", name_event=name_event)
 
 
-#Page d'invitation à l'événement
+#Action d'acceptation de l'invitation à l'événement
 @login_required
-def invitation_to_my_event_accept(request, name_event):
+def invitation_to_event_accept(request, name_event):
 	logged_in_user = request.user #récupération de l'utilisateur
 	event = get_object_or_404(Event, name=name_event) #erreur 404 si l'event n'existe pas ou si l'utilisateur n'a pas créé cet événement
 	# delete invitation add participation
@@ -123,9 +124,9 @@ def invitation_to_my_event_accept(request, name_event):
 	return redirect("myGroceries:homepage")
 
 
-#Page d'invitation à l'événement
+#Action de refus de l'invitation à l'événement
 @login_required
-def invitation_to_my_event_refuse(request, name_event):
+def invitation_to_event_refuse(request, name_event):
 	logged_in_user = request.user #récupération de l'utilisateur
 	event = get_object_or_404(Event, name=name_event) #erreur 404 si l'event n'existe pas ou si l'utilisateur n'a pas créé cet événement
 	# delete invitation
@@ -134,9 +135,9 @@ def invitation_to_my_event_refuse(request, name_event):
 	return redirect("myGroceries:homepage")
 
 
-#Page d'invitation à l'événement
+#Action d'annulation de la participation à l'événement
 @login_required
-def participation_to_my_event_cancel(request, name_event):
+def participation_to_event_cancel(request, name_event):
 	logged_in_user = request.user #récupération de l'utilisateur
 	event = get_object_or_404(Event, name=name_event) #erreur 404 si l'event n'existe pas ou si l'utilisateur n'a pas créé cet événement
 	# delete invitation
@@ -145,40 +146,52 @@ def participation_to_my_event_cancel(request, name_event):
 	return redirect("myGroceries:homepage")
 
 
+# Action de suppression d'un participant à mon événement
+#@login_required
+#def participation_to_my_event_delete(request, name_event, id_invite):
+#	event = get_object_or_404(Event, name=name_event) #erreur 404 si l'event n'existe pas ou si l'utilisateur n'a pas créé cet événement
+#	participation = Participation.objects.get(event=event, user=id_invite)
+#	participation.delete()
+#	return redirect("myGroceries:event_detail")
+
+
+# Action de suppression d'un invité à mon événément
+#@login_required
+#def invitation_to_my_event_delete(request, name_event, id_invite):
+#	event = get_object_or_404(Event, name=name_event) #erreur 404 si l'event n'existe pas ou si l'utilisateur n'a pas créé cet événement
+#	invitation = Invitation.objects.get(event=event, guest=id_invite)
+#	invitation.delete()
+#	return redirect("myGroceries:event_detail")
+
+
 #Page d'ajout de produits à la liste de courses de l'utilisateur
 @login_required
-def add_products_to_event(request, name_event, id_invite):
-	try:
-		product = get_object_or_404(Product, name=name)
+def add_products_to_event(request, name_event):
+	event = get_object_or_404(Event, name=name_event) #erreur 404 si l'event n'existe pas ou si l'utilisateur n'a pas créé cet événement
+	products = Product.objects.all()
+	template = 'myGroceries/add_products_to_event.html'
+	context = {'event' : event, 'products': products}
+	return render(request, template, context)
+
+
+#Action d'ajout de produits à la liste de courses de l'utilisateur
+@login_required
+def add_products_to_event_act(request, name_event):
+	logged_in_user = request.user
+	products_added = request.POST.getlist("products_post")
+	event = get_object_or_404(Event, name=name_event)
+	for p in products_added:
+		product = Product.objects.get(name=p)
 		try:
-			participation = get_object_or_404(Participation, name=name_event)
+			participation = get_object_or_404(Participation, event=event)
 			participation.product.add(product)
 		except ObjectDoesNotExist:
-			pass
-	except ObjectDoesNotExist:
-		product = Product(name=name)
-		product.save()
-		try:
-			participation = get_object_or_404(Participation, name=name_event)
-			participation.product.add(product)
-		except ObjectDoesNotExist:
-			pass
-	return redirect("/event/" + str(name_event))
+				pass
+	return redirect("myGroceries:event_detail", name_event=name_event)
 
-
-#Page de suppression de produits à la liste de courses de l'utilisateur
-@login_required
-def delete_products_to_event(request, name_event):
-	product = get_object_or_404(Product, name=name)
-	product.delete()
-	return redirect("/event/" + str(name_event))
-
-
-#Page de modification de produits à la liste de courses de l'utilisateur
-@login_required
-def update_products_to_event(request, name_event):
-	product = get_object_or_404(Product, name=name)
-	if request.POST.get("product"):
-		product.name = request.POST.get("product")
-		product.save()
-	return redirect("/event/" + str(name_event))
+#Action de suppression de produits à la liste de courses de l'utilisateur
+#@login_required
+#def delete_products_to_event(request, name_event):
+#	product = get_object_or_404(Product, name=name)
+#	product.delete()
+#	return redirect("/event/" + str(name_event))

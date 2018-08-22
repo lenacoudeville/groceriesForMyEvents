@@ -3,22 +3,25 @@
 {% block title %}Ajouter des produits à mes courses{% endblock %}
 
 {% block content %}
-<h1>{{ event }}</h1>
-<h2>Ajouter des produits à mes courses</h2>
-    <a class='btn btn-light pull-left' style='margin-bottom:5px' href="{% url 'myGroceries:event_detail' name_event=event.name %}">Voir l'événement</a>
-    <a class='btn btn-light pull-left' style='margin-bottom:5px' href="{% url 'myGroceries:homepage' %}">Page d'accueil</a><br/>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'myGroceries:homepage' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'myGroceries:event_detail' name_event=event.name %}">{{ event.name }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Ajouter des courses</li>
+  </ol>
+</nav>
 
-    <form action="{% url 'myGroceries:invitation_to_my_event_act' name_event=event %}" method="post">
+    <form action="{% url 'myGroceries:add_products_to_event_act' name_event=event.name %}" method="post">
         {% csrf_token %}
         <div class="table-responsive">
             <table class="table">
-        {% for user in users %}
+        {% for product in products %}
             <tr class="table-success">
-                <td><input type="checkbox" name="users_post" value="{{ user.username }}"> {{ user.username }}</td>
+                <td><input type="checkbox" name="products_post" value="{{ product.name }}"> {{ product.name }}</td>
             </tr>
         {% endfor %}
             <tr>
-                <td><button type="submit" class="btn btn-primary">Ajouter</button></td>
+                <td><button type="submit" class="btn">Ajouter</button></td>
             </tr>
         </table>
         </div>
