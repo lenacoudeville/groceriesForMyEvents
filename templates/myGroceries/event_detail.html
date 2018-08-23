@@ -13,8 +13,7 @@
 
 <p>Nom : {{ event.name }}
 {% if user == event.host %}
-	 (<!--<a href="{% url 'myGroceries:update_event' name_event=event.name %}">Modifier</a> / -->
-	<a href="{% url 'myGroceries:delete_event' name_event=event.name %}">Supprimer</a>)
+	(<a href="{% url 'myGroceries:delete_event' name_event=event.name %}">Supprimer</a>)
 {% endif %}</p>
 <p>Description : {{ event.description }}</p>
 <p>Dates : du {{ event.start_date }} au {{ event.end_date }}</p>
